@@ -1,0 +1,67 @@
+
+
+nếu chọn 3 layers => giả sử trong project Catalog service sẽ có
+controller/
+├── ProductController
+├── CategoryController
+├── BrandController
+└── InventoryController
+
+service/
+├── ProductService
+├── CategoryService
+├── BrandService
+└── InventoryService
+
+repository/
+├── ProductRepository
+├── CategoryRepository
+├── BrandRepository
+└── InventoryRepository
+
+Đây là layer-first architecture.   =>>> Muốn sửa Product phải nhảy qua 3-4 folder.
+
+----- mình chọn cái dưới đây----------
+product/
+├── api
+├── application
+├── domain
+└── infrastructure
+
+là:
+feature-first
++
+layer-inside-feature
+
+
+=>
+catalog
+├── product
+│   ├── api
+│   ├── application
+│   ├── domain
+│   └── infrastructure
+│
+├── category
+│   ├── api
+│   ├── application
+│   ├── domain
+│   └── infrastructure
+│
+└── inventory
+    ├── api
+    ├── application
+    ├── domain
+    └── infrastructure
+
+Mọi thứ của Product nằm cùng khu vực.
+
+
+Sau này nếu muốn Clean Architecture nghiêm hơn:
+domain/
+    ProductRepository.java
+
+infrastructure/
+    JpaProductRepositoryAdapter.java
+
+Domain định nghĩa abstraction, infrastructure implement.
