@@ -3,6 +3,8 @@ package com.ecommerce.catalog.product.application;
 import com.ecommerce.catalog.common.ProductViewTrackingState;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -43,5 +45,26 @@ public class ProductViewCounterService {
     public int getCount(UUID productId){
         AtomicInteger counter =  viewCount.get(productId);   //atomicinteger for thread safe
         return counter == null ? 0 : counter.get();
+    }
+
+    public List<ProductViewStat> getTopViewed(int limit) {
+
+        return viewCount.entrySet()
+                .stream()
+                .map(entry ->
+                        new ProductViewStat(
+                                entry.getKey(),
+                                entry.getValue().get()
+                        )
+                )
+                .sorted(
+                        Comparator
+                                .comparingInt(
+                                        ProductViewStat::views
+                                )
+                                .reversed()
+                )
+                .limit(limit)
+                .toList();
     }
 }

@@ -3,6 +3,8 @@ package com.ecommerce.catalog.product.domain;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
+import java.util.Objects;
+
 @Embeddable
 public class ProductImage {  //is value object of Product
     @Column(name = "image_object_key")
@@ -57,4 +59,46 @@ public class ProductImage {  //is value object of Product
     public Long getSize() {
         return size;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (!(o instanceof ProductImage that)) {
+            return false;
+        }
+
+        return Objects.equals(objectKey, that.objectKey)
+                && Objects.equals(
+                originalFileName,
+                that.originalFileName
+        )
+                && Objects.equals(
+                contentType,
+                that.contentType
+        )
+                && Objects.equals(size, that.size);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(
+                objectKey,
+                originalFileName,
+                contentType,
+                size
+        );
+    }
+
+    /*
+    image2.hashCode()
+        ↓
+    xác định bucket cần tìm
+            ↓
+    equals()
+            ↓
+    có đúng key mình đang tìm không?
+     */
 }

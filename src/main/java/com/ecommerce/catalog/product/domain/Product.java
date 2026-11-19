@@ -108,4 +108,16 @@ public class Product {
         );
     }
 
+    public void changePrice(BigDecimal newPrice) {
+
+        if (newPrice == null ||
+                newPrice.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException(
+                    "Price must be greater than zero"
+            );
+        }
+
+        this.price = newPrice;
+    }
+
 }

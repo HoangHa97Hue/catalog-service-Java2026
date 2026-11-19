@@ -1,10 +1,13 @@
 package com.ecommerce.catalog.product.application;
 
+import com.ecommerce.catalog.common.api.PageResponse;
 import com.ecommerce.catalog.product.api.CreateProductRequest;
 import com.ecommerce.catalog.product.api.ProductResponse;
 import com.ecommerce.catalog.product.domain.Product;
 import com.ecommerce.catalog.product.infrastructure.persistence.ProductRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,10 +27,28 @@ public class GetProductsService {
     }
 
 
-    public List<ProductResponse> getAll(){
-        return productRepository.findAll().stream()
-                .map(ProductResponse::from)
-                .toList(); //List<Product>   -> transform       List<ProductResponse>
+    public PageResponse<ProductResponse> getAll(
+            int page,
+            int size
+    ) {
+
+        Page<Product> products =
+                productRepository.findAll(
+                        PageRequest.of(page, size)
+                );
+
+        List<ProductResponse> responses =
+                products.stream()
+                        .map(ProductResponse::from)
+                        .toList();
+
+        return new PageResponse<>(
+                responses,
+                products.getNumber(),
+                products.getSize(),
+                products.getTotalElements(),
+                products.getTotalPages()
+        );
     }
 
     public ProductResponse getById(UUID id){
